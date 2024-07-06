@@ -25,6 +25,8 @@ var (
 	ReleasesTemplate              = compileTemplate("releases.html", "widget-base.html")
 	ChangeDetectionTemplate       = compileTemplate("change-detection.html", "widget-base.html")
 	VideosTemplate                = compileTemplate("videos.html", "widget-base.html", "video-card-contents.html")
+	MeetupsTemplate               = compileTemplate("meetups.html", "widget-base.html", "meetup-card-content.html")
+	MeetupsGridTemplate           = compileTemplate("meetups-grid.html", "widget-base.html", "meetup-card-content.html")
 	VideosGridTemplate            = compileTemplate("videos-grid.html", "widget-base.html", "video-card-contents.html")
 	MarketsTemplate               = compileTemplate("markets.html", "widget-base.html")
 	RSSListTemplate               = compileTemplate("rss-list.html", "widget-base.html")

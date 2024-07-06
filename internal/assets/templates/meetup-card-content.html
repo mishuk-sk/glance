@@ -1,0 +1,29 @@
+{{ define "meetup-card-contents" }}
+<a href="{{ .URL }}" target="_blank" rel="noreferrer">
+    <img
+        class="meetup-thumbnail thumbnail"
+        loading="lazy"
+        src="{{ .ThumbnailURL }}"
+        alt=""
+    />
+</a>
+<div
+    class="margin-top-10 margin-bottom-widget flex flex-column grow padding-inline-widget"
+>
+    <a
+        class="meetup-title color-primary-if-not-visited"
+        href="{{ .URL }}"
+        target="_blank"
+        rel="noreferrer"
+        title="{{ .Title }}"
+        >{{ .Title }}</a
+    >
+    <div class="meetup-attendees">{{ .Attendees }} going</div>
+    <div class="meetup-details">
+        <span class="meetup-time">{{ .Time.Format "2 Jan 2006 15:04" }}</span>
+        <span class="meetup-location {{ if .IsOnline }}online-label{{ end }}"
+            >{{ if .IsOnline }}Online{{ else }}{{ .Location }}{{ end }}</span
+        >
+    </div>
+</div>
+{{ end }}

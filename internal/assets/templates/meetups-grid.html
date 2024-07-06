@@ -1,0 +1,10 @@
+{{ template "widget-base.html" . }} {{ define "widget-content-classes"
+}}widget-content-frameless{{ end }} {{ define "widget-content" }}
+<div class="cards-grid">
+    {{ range .Meetups }}
+    <div class="card widget-content-frame">
+        {{ template "meetup-card-contents" . }}
+    </div>
+    {{ end }}
+</div>
+{{ end }}

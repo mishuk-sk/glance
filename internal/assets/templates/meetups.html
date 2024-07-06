@@ -1,0 +1,12 @@
+{{ template "widget-base.html" . }} {{ define "widget-content-classes"
+}}widget-content-frameless{{ end }} {{ define "widget-content" }}
+<div class="carousel-container">
+    <div class="cards-horizontal carousel-items-container">
+        {{ range .Meetups }}
+        <div class="card widget-content-frame thumbnail-parent">
+            {{ template "meetup-card-contents" . }}
+        </div>
+        {{ end }}
+    </div>
+</div>
+{{ end }}

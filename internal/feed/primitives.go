@@ -60,6 +60,18 @@ type Video struct {
 
 type Videos []Video
 
+type Meetup struct {
+	Title        string
+	ThumbnailURL string
+	Time         time.Time
+	URL          string
+	IsOnline     bool
+	Attendees    int
+	Location     string
+}
+
+type Meetups []Meetup
+
 var currencyToSymbol = map[string]string{
 	"USD": "$",
 	"EUR": "€",
