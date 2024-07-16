@@ -39,12 +39,28 @@ var (
 	RepositoryTemplate            = compileTemplate("repository.html", "widget-base.html")
 	SearchTemplate                = compileTemplate("search.html", "widget-base.html")
 	ExtensionTemplate             = compileTemplate("extension.html", "widget-base.html")
+	TasksTemplate                 = compileTemplate("tasks.html", "task_item.html", "widget-base.html")
 )
 
 var globalTemplateFunctions = template.FuncMap{
 	"relativeTime":      relativeTimeSince,
 	"formatViewerCount": formatViewerCount,
 	"formatNumber":      intl.Sprint,
+	"priorityLabel": func(priority int) string {
+		switch priority {
+		case 1:
+			return "P5"
+		case 2:
+			return "P4"
+		case 3:
+			return "P3"
+		case 4:
+			return "P2"
+		case 5:
+			return "P1"
+		}
+		return ""
+	},
 	"absInt": func(i int) int {
 		return int(math.Abs(float64(i)))
 	},

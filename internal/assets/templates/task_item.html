@@ -1,0 +1,55 @@
+{{ define "task-item" }}
+<div
+    class="task-item"
+    x-data="{ id: {{ .ID }}, is_done: {{ .Done }}, toggle() { this.is_done = ! this.is_done } }"
+    x-init="is_done = {{ .Done }}"
+    x-bind:class="is_done ? 'task-done' : ''"
+>
+    <input
+        type="checkbox"
+        class="task-checkbox"
+        {{
+        if
+        .Done
+        }}checked{{
+        end
+        }}
+        @click="() => {
+            fetch('/api/tasks/'+id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    done: !is_done
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    toggle();
+                    showAlert('Task updated successfully', 'success');
+                } else {
+                    showAlert('Failed to update task', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('Failed to update task', 'error');
+            });
+        }"
+        x-bind:checked="is_done"
+    />
+    <div class="task-content">
+        <strong class="task-text">{{ .Text }}</strong>
+        {{ if and (ne .Priority 0) (ne .Priority nil) }}
+        <div class="task-priority task-priority-{{ .Priority }}">
+            {{ priorityLabel .Priority }}
+        </div>
+        {{ end }}
+        <div class="task-due-date">
+            {{ if .DueDate.IsZero }} No due date {{ else }} {{ .DueDate.Format
+            "2 Jan 2006 15:04" }}{{ end }}
+        </div>
+    </div>
+</div>
+{{ end }}

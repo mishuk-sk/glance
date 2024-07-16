@@ -3,11 +3,14 @@ package glance
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -42,6 +45,10 @@ type Server struct {
 	Port       uint16    `yaml:"port"`
 	AssetsPath string    `yaml:"assets-path"`
 	StartedAt  time.Time `yaml:"-"`
+}
+
+type General struct {
+	TasksBackendURL string `yaml:"tasks-backend"`
 }
 
 type Column struct {
@@ -173,6 +180,60 @@ func (a *Application) HandlePageContentRequest(w http.ResponseWriter, r *http.Re
 	w.Write(responseBytes.Bytes())
 }
 
+func (a *Application) HandleCompleteTask(w http.ResponseWriter, r *http.Request) {
+	taskIDStr := r.PathValue("id")
+	taskID, err := strconv.Atoi(taskIDStr)
+	if err != nil {
+		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		return
+	}
+
+	var req struct {
+		Done bool `json:"done"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	backendURL := fmt.Sprintf("%s/tasks/%d", a.Config.General.TasksBackendURL, taskID)
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		http.Error(w, "Error preparing request", http.StatusInternalServerError)
+		return
+	}
+
+	client := &http.Client{}
+	httpReq, err := http.NewRequest(http.MethodPut, backendURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		slog.Error("Error creating request", "error", err)
+		http.Error(w, "Error creating request", http.StatusInternalServerError)
+		return
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+
+	// Send the request to the Python backend
+	resp, err := client.Do(httpReq)
+	if err != nil {
+		slog.Error("Error submitting request to backend", "error", err)
+		http.Error(w, "Error submitting request to backend", http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Check the backend response status
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		// log error and send response
+		slog.Error("Backend error", "error", string(bodyBytes), "status", resp.StatusCode)
+		http.Error(w, fmt.Sprintf("Backend error: %s", string(bodyBytes)), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (a *Application) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	// TODO: add proper not found page
 	w.WriteHeader(http.StatusNotFound)
@@ -197,6 +258,7 @@ func (a *Application) Serve() error {
 	mux.HandleFunc("GET /{$}", a.HandlePageRequest)
 	mux.HandleFunc("GET /{page}", a.HandlePageRequest)
 	mux.HandleFunc("GET /api/pages/{page}/content/{$}", a.HandlePageContentRequest)
+	mux.HandleFunc("POST /api/tasks/{id}", a.HandleCompleteTask)
 	mux.Handle("GET /static/{path...}", http.StripPrefix("/static/", FileServerWithCache(http.FS(assets.PublicFS), 2*time.Hour)))
 
 	if a.Config.Server.AssetsPath != "" {

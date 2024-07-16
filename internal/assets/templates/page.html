@@ -25,6 +25,15 @@
 {{ end }}
 
 {{ define "document-body" }}
+<div class="alert-box"
+    x-show="show_alert_message"
+    x-bind:style="'background-color: ' + alert_background_color"
+    x-transition>
+    <p x-text="alert_message_text"></p>
+    <div class="closebtn-container" @click="hideAlert()">
+        <span class="closebtn">&times;</span>
+    </div>
+</div>
 <div class="header-container content-bounds">
     <div class="header flex padding-inline-widget widget-content-frame">
         <!-- TODO: Replace G with actual logo, first need an actual logo -->

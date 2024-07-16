@@ -59,6 +59,8 @@ func New(widgetType string) (Widget, error) {
 		return &Extension{}, nil
 	case "meetups":
 		return &Meetups{}, nil
+	case "tasks":
+		return &TasksWidget{}, nil
 	default:
 		return nil, fmt.Errorf("unknown widget type: %s", widgetType)
 	}

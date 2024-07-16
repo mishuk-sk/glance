@@ -1,0 +1,8 @@
+{{ template "widget-base.html" . }} {{ define "widget-content-classes"
+}}widget-content-frameless{{ end }} {{ define "widget-content" }}
+<ul class="task-list">
+    {{ range .Tasks }}
+    <li class="task-item">{{ template "task-item" . }}</li>
+    {{ end }}
+</ul>
+{{ end }}

@@ -1369,6 +1369,132 @@ kbd:active {
     color: var(--color-text-base-muted);
 }
 
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Task Item Styles */
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-widget-content-border);
+}
+
+.task-checkbox {
+    margin-right: 1rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    cursor: pointer;
+}
+
+.task-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.task-text {
+    font-size: var(--font-size-base);
+    color: var(--color-text-highlight);
+    margin-right: 1rem;
+}
+
+.task-due-date {
+    font-size: var(--font-size-h6);
+    color: var(--color-text-base-muted);
+    margin-left: auto;
+    margin-right: 1rem;
+    white-space: nowrap;
+}
+
+.task-priority {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 2rem;
+    font-size: var(--font-size-h6);
+    color: var(--color-widget-background);
+    margin-right: 1rem;
+}
+
+.task-priority-5 {
+    background-color: hsl(360, 100%, 60%);
+}
+.task-priority-4 {
+    background-color: hsl(45, 100%, 50%);
+}
+.task-priority-3 {
+    background-color: hsl(60, 100%, 40%);
+}
+.task-priority-2 {
+    background-color: hsl(120, 100%, 35%);
+}
+.task-priority-1 {
+    background-color: hsl(180, 100%, 30%);
+}
+
+.task-status {
+    font-size: var(--font-size-h6);
+    color: var(--color-text-subdue);
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.task-done .task-text {
+    text-decoration: line-through;
+    color: var(--color-text-base-muted);
+}
+
+.alert-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    padding: 10px;
+    z-index: 1000; /* Ensure it appears above other elements */
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-box p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.alert-box .closebtn {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.alert-box .closebtn:hover {
+    color: #bbb;
+}
+
+/* Close button container for better alignment */
+.alert-box .closebtn-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .online-label {
     background-color: var(--color-positive);
     color: var(--color-widget-background);

@@ -15,7 +15,7 @@ import (
 const buildPath = "./build"
 const archivesPath = "./build/archives"
 const executableName = "glance"
-const ownerAndRepo = "mishuksk/glance"
+const ownerAndRepo = "mishuk-sk/glance"
 const moduleName = "github.com/" + ownerAndRepo
 
 type archiveType int

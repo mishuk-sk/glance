@@ -17,9 +17,37 @@
     <link rel="icon" type="image/png" href="/static/favicon.png" />
     <link rel="stylesheet" href="/static/main.css?v={{ .App.Config.Server.StartedAt.Unix }}">
     <script async src="/static/main.js?v={{ .App.Config.Server.StartedAt.Unix }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {{ block "document-head-after" . }}{{ end }}
 </head>
-<body>
+<body x-data="{
+    show_alert_message: false,
+    alert_message_text: 'Something happened!',
+    alert_background_color: '#f44336',
+    showAlert(text, status){
+        this.show_alert_message = true;
+        this.alert_message_text = text;
+        switch(status){
+            case 'success':
+                this.alert_background_color = '#4caf50';
+                break;
+            case 'error':
+                this.alert_background_color = '#f44336';
+                break;
+            case 'warning':
+                this.alert_background_color = '#ff9800';
+                break;
+            default:
+                this.alert_background_color = '#f44336';
+        }
+        setTimeout(() => {
+            this.hideAlert();
+        }, 3000);
+    },
+    hideAlert(){
+        this.show_alert_message = false;
+    }}"
+>
 {{ template "document-body" . }}
 </body>
 </html>
